@@ -1,6 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const supplierRoutes = require('./routes/supplierRoutes');
+const storeRoutes = require('./routes/storeRoutes');
+const loyaltyRoutes = require('./routes/loyaltyRoutes');
+const alertRoutes = require('./routes/alertRoutes');
+
 require('dotenv').config();
+
 
 const app = express();
 
@@ -12,6 +18,10 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/sales', require('./routes/sales'));
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/stores', storeRoutes);
+app.use('/api/loyalty', loyaltyRoutes);
+app.use('/api/alerts', alertRoutes);
 
 app.get('/', (req, res) => {
     res.send('POS Backend Running');

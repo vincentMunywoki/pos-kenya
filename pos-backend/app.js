@@ -4,6 +4,7 @@ const supplierRoutes = require('./routes/supplierRoutes');
 const storeRoutes = require('./routes/storeRoutes');
 const loyaltyRoutes = require('./routes/loyaltyRoutes');
 const alertRoutes = require('./routes/alertRoutes');
+const errorHandler = require('./middleware/errorHandler');
 
 require('dotenv').config();
 
@@ -22,6 +23,7 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/loyalty', loyaltyRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
     res.send('POS Backend Running');

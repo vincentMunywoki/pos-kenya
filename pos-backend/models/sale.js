@@ -48,6 +48,8 @@ const Sale = {
                     'UPDATE customers SET loyalty_points = loyalty_points + $1 WHERE id = $2',
                     [Math.floor(total_amount / 100), customer_id]
                 );
+
+                 console.log(`🎁 Updated loyalty points for customer ${customer_id}: ${updateLoyalty.rows[0].loyalty_points}`);
             }
 
             await pool.query('COMMIT');

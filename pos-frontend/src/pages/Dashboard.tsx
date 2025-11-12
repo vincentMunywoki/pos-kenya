@@ -7,8 +7,9 @@ import { Receipt } from "@/components/Receipt";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext"; // <-- import auth
 
-// Mock data - replace with API calls
+// Mock products
 const mockProducts = [
   { id: "1", name: "Wireless Mouse", price: 29.99, stock: 45, image: "" },
   { id: "2", name: "USB-C Cable", price: 12.99, stock: 8, image: "" },
@@ -18,23 +19,15 @@ const mockProducts = [
   { id: "6", name: "Monitor Stand", price: 39.99, stock: 30, image: "" },
 ];
 
-const mockCustomer = {
-  name: "John Doe",
-  email: "john@example.com",
-  loyaltyPoints: 450
-};
-
 const Dashboard = () => {
+  const { user } = useAuth(); // <-- get current user
   const [searchQuery, setSearchQuery] = useState("");
-  const [cartItems, setCartItems] = useState<Array<{
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-  }>>([]);
+  const [cartItems, setCartItems] = useState<
+    Array<{ id: string; name: string; price: number; quantity: number }>
+  >([]);
   
   const receiptRef = useRef<HTMLDivElement>(null);
-  
+
   const handlePrint = useReactToPrint({
     contentRef: receiptRef,
     documentTitle: `Receipt-${new Date().toLocaleDateString()}`,
@@ -97,13 +90,11 @@ const Dashboard = () => {
   };
 
   const handleCheckout = () => {
-    // Here you would call your backend API
-    const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     toast({
       title: "Checkout successful",
       description: `Total: $${total.toFixed(2)}`,
     });
-    // Print receipt and clear cart
     setTimeout(() => {
       handlePrint();
       setCartItems([]);
@@ -126,8 +117,13 @@ const Dashboard = () => {
     <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
         <div className="lg:col-span-2 space-y-6">
-          <CustomerInfoCard {...mockCustomer} />
-          
+          {/* Display logged-in user's name */}
+          <CustomerInfoCard
+            name={user?.name || "Guest"}
+            email={user?.email || ""}
+            loyaltyPoints={0} // You can fetch real points later
+          />
+
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
             <Input
@@ -160,14 +156,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Hidden receipt component for printing */}
       <div className="hidden">
         <Receipt
           ref={receiptRef}
           items={cartItems}
           storeName="Main Store"
           storeAddress="123 Main St, City, State 12345"
-          customerName={mockCustomer.name}
+          customerName={user?.name || "Guest"} // use actual logged-in name
           date={new Date()}
         />
       </div>

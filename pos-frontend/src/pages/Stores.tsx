@@ -39,7 +39,7 @@ const Stores = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Total Sales</p>
-                    <p className="text-lg font-bold text-success">${store.totalSales.toFixed(2)}</p>
+                    <p className="text-lg font-bold text-success">Ksh. {store.totalSales.toFixed(2)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Transactions</p>

@@ -12,9 +12,16 @@ interface ProductCardProps {
   onAddToCart: (id: string) => void;
 }
 
-export const ProductCard = ({ id, name, price, stock, image, onAddToCart }: ProductCardProps) => {
+export const ProductCard = ({
+  id,
+  name,
+  price,
+  stock,
+  image,
+  onAddToCart,
+}: ProductCardProps) => {
   const isLowStock = stock < 10;
-  
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="aspect-square bg-muted relative">
@@ -32,17 +39,21 @@ export const ProductCard = ({ id, name, price, stock, image, onAddToCart }: Prod
           </Badge>
         )}
       </div>
-      
+
       <div className="p-4 space-y-3">
         <div>
-          <h3 className="font-semibold text-card-foreground line-clamp-1">{name}</h3>
+          <h3 className="font-semibold text-card-foreground line-clamp-1">
+            {name}
+          </h3>
           <p className="text-sm text-muted-foreground">Stock: {stock}</p>
         </div>
-        
+
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-primary">${price.toFixed(2)}</span>
-          <Button 
-            size="sm" 
+          <span className="text-lg font-bold text-primary">
+            Ksh.{price.toFixed(2)}
+          </span>
+          <Button
+            size="sm"
             onClick={() => onAddToCart(id)}
             disabled={stock === 0}
           >

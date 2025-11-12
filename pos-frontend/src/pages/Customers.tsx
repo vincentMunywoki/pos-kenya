@@ -21,24 +21,24 @@ const mockCustomers = [
     name: "John Doe", 
     email: "john@example.com", 
     phone: "+1234567890",
-    loyaltyPoints: 450,
-    totalPurchases: 1250.50
+    loyaltyPoints: 4500,
+    totalPurchases: 12500.50
   },
   { 
     id: "2", 
     name: "Jane Smith", 
     email: "jane@example.com", 
     phone: "+1234567891",
-    loyaltyPoints: 320,
-    totalPurchases: 890.30
+    loyaltyPoints: 3200,
+    totalPurchases: 8900.30
   },
   { 
     id: "3", 
     name: "Bob Johnson", 
     email: "bob@example.com", 
     phone: "+1234567892",
-    loyaltyPoints: 150,
-    totalPurchases: 450.00
+    loyaltyPoints: 1500,
+    totalPurchases: 4500.00
   },
 ];
 
@@ -114,7 +114,7 @@ const Customers = () => {
                   <Badge variant="secondary">{customer.loyaltyPoints} pts</Badge>
                 </TableCell>
                 <TableCell className="font-semibold text-primary">
-                  ${customer.totalPurchases.toFixed(2)}
+                  Ksh. {customer.totalPurchases.toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">

@@ -73,8 +73,8 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
                 <tr key={item.id} className="border-b border-gray-200">
                   <td className="py-2">{item.name}</td>
                   <td className="text-center py-2">{item.quantity}</td>
-                  <td className="text-right py-2">${item.price.toFixed(2)}</td>
-                  <td className="text-right py-2">${(item.price * item.quantity).toFixed(2)}</td>
+                  <td className="text-right py-2">Ksh.{item.price.toFixed(2)}</td>
+                  <td className="text-right py-2">Ksh.{(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -87,16 +87,16 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
         <div className="space-y-2 mb-6">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Subtotal:</span>
-            <span className="font-medium">${subtotal.toFixed(2)}</span>
+            <span className="font-medium">Ksh.{subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Tax (10%):</span>
-            <span className="font-medium">${tax.toFixed(2)}</span>
+            <span className="font-medium">Ksh.{tax.toFixed(2)}</span>
           </div>
           <Separator className="my-2 bg-gray-300" />
           <div className="flex justify-between text-lg font-bold">
             <span>Total:</span>
-            <span>${total.toFixed(2)}</span>
+            <span>Ksh.{total.toFixed(2)}</span>
           </div>
         </div>
 

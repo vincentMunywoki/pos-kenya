@@ -47,7 +47,7 @@ export const CartPanel = ({
               <div key={item.id} className="flex items-center gap-3 p-3 bg-muted rounded-lg">
                 <div className="flex-1">
                   <h4 className="font-medium text-card-foreground">{item.name}</h4>
-                  <p className="text-sm text-primary font-semibold">${item.price.toFixed(2)}</p>
+                  <p className="text-sm text-primary font-semibold">Ksh.{item.price.toFixed(2)}</p>
                 </div>
                 
                 <div className="flex items-center gap-2">
@@ -86,16 +86,16 @@ export const CartPanel = ({
           <div className="p-4 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Subtotal</span>
-              <span className="font-medium">${subtotal.toFixed(2)}</span>
+              <span className="font-medium">Ksh.{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Tax (10%)</span>
-              <span className="font-medium">${tax.toFixed(2)}</span>
+              <span className="font-medium">Ksh.{tax.toFixed(2)}</span>
             </div>
             <Separator />
             <div className="flex justify-between text-lg font-bold">
               <span>Total</span>
-              <span className="text-primary">${total.toFixed(2)}</span>
+              <span className="text-primary">Ksh.{total.toFixed(2)}</span>
             </div>
           </div>
           

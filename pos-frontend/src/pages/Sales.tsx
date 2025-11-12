@@ -20,7 +20,7 @@ const mockSales = [
     date: "2025-01-12", 
     customer: "John Doe", 
     store: "Main Store", 
-    total: 249.97, 
+    total: 2490.97, 
     items: 3,
     status: "completed" 
   },
@@ -29,7 +29,7 @@ const mockSales = [
     date: "2025-01-12", 
     customer: "Jane Smith", 
     store: "Main Store", 
-    total: 89.99, 
+    total: 890.99, 
     items: 1,
     status: "completed" 
   },
@@ -38,7 +38,7 @@ const mockSales = [
     date: "2025-01-11", 
     customer: "Bob Johnson", 
     store: "Branch Store", 
-    total: 159.98, 
+    total: 1590.98, 
     items: 2,
     status: "completed" 
   },
@@ -93,7 +93,7 @@ const Sales = () => {
                 <TableCell>{sale.store}</TableCell>
                 <TableCell>{sale.items}</TableCell>
                 <TableCell className="font-semibold text-primary">
-                  ${sale.total.toFixed(2)}
+                  Ksh. {sale.total.toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary">{sale.status}</Badge>

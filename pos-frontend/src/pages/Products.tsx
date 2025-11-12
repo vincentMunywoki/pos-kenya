@@ -16,11 +16,11 @@ import { toast } from "@/hooks/use-toast";
 
 // Mock data
 const mockProducts = [
-  { id: "1", name: "Wireless Mouse", sku: "WM001", price: 29.99, stock: 45, category: "Electronics" },
-  { id: "2", name: "USB-C Cable", sku: "UC002", price: 12.99, stock: 8, category: "Accessories" },
-  { id: "3", name: "Keyboard", sku: "KB003", price: 79.99, stock: 23, category: "Electronics" },
-  { id: "4", name: "Headphones", sku: "HP004", price: 149.99, stock: 15, category: "Electronics" },
-  { id: "5", name: "Webcam", sku: "WC005", price: 89.99, stock: 3, category: "Electronics" },
+  { id: "1", name: "Wireless Mouse", sku: "WM001", price: 290.99, stock: 45, category: "Electronics" },
+  { id: "2", name: "USB-C Cable", sku: "UC002", price: 120.99, stock: 8, category: "Accessories" },
+  { id: "3", name: "Keyboard", sku: "KB003", price: 790.99, stock: 23, category: "Electronics" },
+  { id: "4", name: "Headphones", sku: "HP004", price: 1490.99, stock: 15, category: "Electronics" },
+  { id: "5", name: "Webcam", sku: "WC005", price: 890.99, stock: 3, category: "Electronics" },
 ];
 
 const Products = () => {
@@ -83,7 +83,7 @@ const Products = () => {
         <Card className="p-4">
           <h3 className="text-sm text-muted-foreground mb-1">Total Value</h3>
           <p className="text-2xl font-bold text-success">
-            ${mockProducts.reduce((sum, p) => sum + (p.price * p.stock), 0).toFixed(2)}
+            Ksh. {mockProducts.reduce((sum, p) => sum + (p.price * p.stock), 0).toFixed(2)}
           </p>
         </Card>
       </div>
@@ -118,7 +118,7 @@ const Products = () => {
                 <TableCell className="text-muted-foreground">{product.sku}</TableCell>
                 <TableCell>{product.category}</TableCell>
                 <TableCell className="font-semibold text-primary">
-                  ${product.price.toFixed(2)}
+                  Ksh. {product.price.toFixed(2)}
                 </TableCell>
                 <TableCell>{product.stock}</TableCell>
                 <TableCell>

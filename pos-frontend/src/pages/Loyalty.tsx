@@ -83,7 +83,7 @@ const Loyalty = () => {
                   </Badge>
                 </TableCell>
                 <TableCell className="font-semibold text-success">
-                  ${customer.totalSpent.toFixed(2)}
+                  Ksh. {customer.totalSpent.toFixed(2)}
                 </TableCell>
               </TableRow>
             ))}

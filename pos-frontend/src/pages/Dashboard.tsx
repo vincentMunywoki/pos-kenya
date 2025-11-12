@@ -1,91 +1,177 @@
 import { useState, useRef } from "react";
-import ProductCard from "../components/ProductCard";
-import CartItem from "../components/CartPanel";
-import CustomerInfo from "../components/CustomerInfo";
-import Receipt from "../components/Receipt";
-import Sidebar from "../components/Sidebar";
+import { useReactToPrint } from "react-to-print";
+import { ProductCard } from "@/components/ProductCard";
+import { CartPanel } from "@/components/CartPanel";
+import { CustomerInfoCard } from "@/components/CustomerInfoCard";
+import { Receipt } from "@/components/Receipt";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  stock: number;
-}
-
-interface CartItemType {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  total: number;
-}
-
-interface Customer {
-  name: string;
-  loyalty_points: number;
-}
-
-const dummyProducts: Product[] = [
-  { id: 1, name: "Hammer", price: 1200, stock: 10 },
-  { id: 2, name: "Screwdriver", price: 800, stock: 15 },
+// Mock data - replace with API calls
+const mockProducts = [
+  { id: "1", name: "Wireless Mouse", price: 29.99, stock: 45, image: "" },
+  { id: "2", name: "USB-C Cable", price: 12.99, stock: 8, image: "" },
+  { id: "3", name: "Keyboard", price: 79.99, stock: 23, image: "" },
+  { id: "4", name: "Headphones", price: 149.99, stock: 15, image: "" },
+  { id: "5", name: "Webcam", price: 89.99, stock: 3, image: "" },
+  { id: "6", name: "Monitor Stand", price: 39.99, stock: 30, image: "" },
 ];
 
+const mockCustomer = {
+  name: "John Doe",
+  email: "john@example.com",
+  loyaltyPoints: 450
+};
+
 const Dashboard = () => {
-  const [cart, setCart] = useState<CartItemType[]>([]);
-  const [customer] = useState<Customer | null>({
-    name: "John Doe",
-    loyalty_points: 120,
+  const [searchQuery, setSearchQuery] = useState("");
+  const [cartItems, setCartItems] = useState<Array<{
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+  }>>([]);
+  
+  const receiptRef = useRef<HTMLDivElement>(null);
+  
+  const handlePrint = useReactToPrint({
+    contentRef: receiptRef,
+    documentTitle: `Receipt-${new Date().toLocaleDateString()}`,
+    onAfterPrint: () => {
+      toast({
+        title: "Receipt printed",
+        description: "Receipt has been sent to the printer.",
+      });
+    },
   });
 
-  const receiptRef = useRef<HTMLDivElement>(null);
+  const filteredProducts = mockProducts.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const addToCart = (product: Product) => {
-    setCart((prev) => {
-      const existing = prev.find((i) => i.id === product.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.id === product.id
-            ? { ...i, quantity: i.quantity + 1, total: (i.quantity + 1) * i.price }
-            : i
-        );
-      } else {
-        return [...prev, { ...product, quantity: 1, total: product.price }];
-      }
+  const handleAddToCart = (productId: string) => {
+    const product = mockProducts.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingItem = cartItems.find(item => item.id === productId);
+    
+    if (existingItem) {
+      setCartItems(cartItems.map(item =>
+        item.id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+    } else {
+      setCartItems([...cartItems, {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1
+      }]);
+    }
+
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
- 
-  const total = cart.reduce((a, b) => a + b.total, 0);
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    if (quantity <= 0) {
+      handleRemoveItem(id);
+    } else {
+      setCartItems(cartItems.map(item =>
+        item.id === id ? { ...item, quantity } : item
+      ));
+    }
+  };
+
+  const handleRemoveItem = (id: string) => {
+    setCartItems(cartItems.filter(item => item.id !== id));
+    toast({
+      title: "Removed from cart",
+      description: "Item has been removed from your cart.",
+      variant: "destructive",
+    });
+  };
+
+  const handleCheckout = () => {
+    // Here you would call your backend API
+    const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    toast({
+      title: "Checkout successful",
+      description: `Total: $${total.toFixed(2)}`,
+    });
+    // Print receipt and clear cart
+    setTimeout(() => {
+      handlePrint();
+      setCartItems([]);
+    }, 500);
+  };
+
+  const handlePrintReceipt = () => {
+    if (cartItems.length === 0) {
+      toast({
+        title: "Cart is empty",
+        description: "Add items to cart before printing receipt.",
+        variant: "destructive",
+      });
+      return;
+    }
+    handlePrint();
+  };
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-64">
-        <Sidebar />
-      </aside>
-      <main className="flex-1 p-4 flex flex-col">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <div className="flex flex-1 gap-4">
-          <div className="grid grid-cols-2 gap-4 flex-1">
-            {dummyProducts.map((p) => (
-              <ProductCard key={p.id} product={p} addToCart={addToCart} />
-            ))}
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+        <div className="lg:col-span-2 space-y-6">
+          <CustomerInfoCard {...mockCustomer} />
+          
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <Input
+              placeholder="Search products or scan barcode..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-          <div className="w-80">
-            <CustomerInfo customer={customer} />
-            <div className="border rounded mb-4 p-2">
-              <h3 className="font-bold mb-2">Cart</h3>
-              {cart.map((item) => (
-                <CartItem key={item.id} item={item} />
-              ))}
-              <p className="mt-2 font-bold">Total: KES {total}</p>
-            </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                {...product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Receipt preview */}
-        <Receipt ref={receiptRef} sale={{ id: 1, total_amount: total, items: cart }} customer={customer} />
-      </main>
-    </div>
+        <div className="lg:col-span-1">
+          <CartPanel
+            items={cartItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            onCheckout={handleCheckout}
+            onPrintReceipt={handlePrintReceipt}
+          />
+        </div>
+      </div>
+
+      {/* Hidden receipt component for printing */}
+      <div className="hidden">
+        <Receipt
+          ref={receiptRef}
+          items={cartItems}
+          storeName="Main Store"
+          storeAddress="123 Main St, City, State 12345"
+          customerName={mockCustomer.name}
+          date={new Date()}
+        />
+      </div>
+    </>
   );
 };
 
